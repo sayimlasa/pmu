@@ -7,10 +7,11 @@ use App\Models\User;
 use Carbon\Carbon;
 use http\Env\Response;
 use Illuminate\Http\Request;
-use App\Mail;
 use App\Mail\TestMain;
 use Illuminate\Notifications\Notification;
-
+use Illuminate\Support\Facades\Mail;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Validator;
 class ContractController extends Controller
 {
     public function index()
@@ -24,17 +25,22 @@ class ContractController extends Controller
     {
         return view('contracts.add');
     }
-
-    public function store(Request $request)
+  
+    public function show(Contract $contracts)
+    {
+        return view('contracts.view',compact('contracts'));
+    } 
+     
+    public function store(Request $request):RedirectResponse
     {
         $request->validate([
             'name' => 'required|unique:contracts',
             'startd' => 'required',
             'endd' => 'required',
-            'document' => 'required|max:2048'
+            'document' => 'required|file|mimes:jepg,jpg,png,gif,pdf|max:2048'
         ]);
-       //$filename=time().'.'.$request->document->extension();
-        //$filename=$request->document->move(public_path('uploads'));
+       $filename=time().'.'.$request->document->extension();
+        $request->document->move(public_path('uploads'),$filename);
         $contract = new Contract();
         $contract->name = $request->name;
         $contract->startd = $request->startd;
@@ -44,7 +50,7 @@ class ContractController extends Controller
         $contract->duration = $start->diffInMonths($end);
         $contract->document=$request->document;
         $contract->save();
-        return redirect()->route('contract')->with('success','Detail  successfully saved');
+        return redirect()->route('contract')->with('success','Detail  successfully saved',$filename);
 
     }
 
@@ -54,7 +60,7 @@ class ContractController extends Controller
         if (!$contract) return back()->with('error', 'Contract does exist');
         return view('contracts.edit', compact('contract'));
     }
-
+    
     public function update(Request $request, string $id)
     {
         $request->validate([
@@ -76,7 +82,7 @@ class ContractController extends Controller
 public function send(){
 $subject="Test Mail";
 $body="Test Body";
-\Illuminate\Support\Facades\Mail::to("sayimlasa2021@gmail.com","SAYI MAKOYE")->send(new TestMain($subject,$body));
+Mail::to("sayimlasa2021@gmail.com","SAYI MAKOYE")->send(new TestMain($subject,$body));
 }
 
 public function sendmessage(Request $request)

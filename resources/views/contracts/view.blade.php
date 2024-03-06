@@ -1,40 +1,57 @@
 @extends('home')
 @section('content')
-    <div class="container mt-2">
-        <div class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0">Contract Details</h1>
-                    </div><!-- /.col -->
-                    
-                </div><!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </div>
-        @if ($message = Session::get('success'))
-            <div class="alert alert-success">
-                <p>{{ $message }}</p>
+    <div class="row">
+        <div class="col-lg-12 margin-tb">
+            <div class="pull-left">
+                <h2>  </h2>
             </div>
-        @endif
-        <p>Name Contract</p>
-                <p>{{$contracts->name}}</p>
-        <table class="table table-bordered">
-            <tr>
-                <td>Name Contract</td>
-                <td>{{$contracts->name}}</td>  
-            </tr>
-            <tr>
-                <td>Starting  Contract</td>
-                <td>{{$contracts->startd}}</td>  
-            </tr>
-            <tr>
-                <td>Ending Contract</td>
-                <td>{{$contracts->endd}}</td>  
-            </tr>
-            <tr>
-                <td>Contract Document</td>
-                <td>{{$contracts->document}}</td>  
-            </tr>
-            
-        </table>
-@endsection
+            <div class="pull-right">
+                <a class="btn btn-primary" href="{{route('contract')}}" title="Go back"> <i class="fas fa-backward "></i> </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
+                <strong>Name Contract:</strong>
+                {{$contracts->name}}
+
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
+                <strong>Starting Contract</strong></strong>
+                {{$contracts->startd}}
+
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
+                <strong>Ending Contract:</strong>
+                {{$contracts->endd}}
+
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
+                <strong>Document:</strong>
+                <strong> <img src="{{ asset('uploads/'.$contracts->document) }}" style="height: 500px;width:500px;"/> </strong>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
+                <strong>Date Created :</strong>
+                {{$contracts->created_at}}
+
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12">
+            <div class="form-group">
+                <strong>Date Updated :</strong>
+                {{$contracts->updated_at}}
+
+            </div>
+        </div>
+    </div
+    @endsection
